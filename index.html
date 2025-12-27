@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penjelajah Labirin: Duel DFS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🧩 Penjelajah Labirin: Duel DFS</h1>
+        <p>Bandingkan performa algoritma DFS Rekursif vs Iteratif dalam menyelesaikan labirin</p>
+    </header>
+
+    <main class="container">
+        <!-- Panel Kontrol -->
+        <section id="panel-kontrol" class="panel">
+            <h2>⚙️ Panel Kontrol</h2>
+            
+            <div class="input-group">
+                <label for="input-lebar">Lebar Labirin:</label>
+                <input type="number" id="input-lebar" min="5" max="50" value="15">
+            </div>
+            
+            <div class="input-group">
+                <label for="input-tinggi">Tinggi Labirin:</label>
+                <input type="number" id="input-tinggi" min="5" max="50" value="15">
+            </div>
+            
+            <div class="input-group">
+                <label for="input-kecepatan">Kecepatan Animasi:</label>
+                <input type="range" id="input-kecepatan" min="1" max="100" value="50">
+                <span id="label-kecepatan">50</span>
+            </div>
+            
+            <div class="button-group">
+                <button id="btn-buat" class="btn btn-primary">🎲 Buat Labirin Baru</button>
+                <button id="btn-rekursif" class="btn btn-success">🔄 Selesaikan (Rekursif)</button>
+                <button id="btn-iteratif" class="btn btn-warning">📚 Selesaikan (Iteratif)</button>
+                <button id="btn-bersihkan" class="btn btn-secondary">🧹 Bersihkan Jalur</button>
+                <button id="btn-benchmark" class="btn btn-info" style="margin-top: 10px; background-color: #8b5cf6;">📈 Benchmark (Tren Data)</button>
+            </div>
+
+            <!-- Stack Visualization -->
+            <div class="stack-visualization">
+                <h3>📊 Visualisasi Stack</h3>
+                <div class="stack-info">
+                    <div class="stack-item">
+                        <span class="stack-label">Ukuran Stack:</span>
+                        <span class="stack-value" id="stack-size">0</span>
+                    </div>
+                    <div class="stack-item">
+                        <span class="stack-label">Kedalaman Maks:</span>
+                        <span class="stack-value" id="max-depth">0</span>
+                    </div>
+                    <div class="stack-item">
+                        <span class="stack-label">Status:</span>
+                        <span class="stack-value" id="algorithm-status">Idle</span>
+                    </div>
+                </div>
+                <div class="stack-bar-container">
+                    <div class="stack-bar" id="stack-bar"></div>
+                </div>
+            </div>
+
+            <!-- History Log -->
+            <div class="history-log">
+                <h3>📜 History Perjalanan</h3>
+                <div class="history-controls">
+                    <button id="btn-toggle-history" class="btn-small btn-info">Tampilkan Detail</button>
+                    <button id="btn-clear-history" class="btn-small btn-danger">Hapus History</button>
+                </div>
+                <div class="history-content" id="history-content">
+                    <p class="history-placeholder">Belum ada history. Jalankan algoritma terlebih dahulu.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Area Visual -->
+        <section id="area-visual" class="panel">
+            <h2>🎨 Visualisasi Labirin</h2>
+            
+            <!-- Step Counter -->
+            <div class="step-counter">
+                <div class="counter-item">
+                    <span class="counter-label">Langkah:</span>
+                    <span class="counter-value" id="step-count">0</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-label">Metode:</span>
+                    <span class="counter-value" id="current-method">-</span>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="maze-canvas"></canvas>
+            </div>
+            
+            <!-- Step-by-Step Explanation -->
+            <div class="step-explanation">
+                <h3>📝 Langkah Terakhir:</h3>
+                <div class="step-content" id="step-content">
+                    <p class="step-placeholder">Jalankan algoritma untuk melihat langkah-langkahnya...</p>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><span class="color-box" style="background-color: #4ade80;"></span> Start</div>
+                <div class="legend-item"><span class="color-box" style="background-color: #f87171;"></span> Finish</div>
+                <div class="legend-item"><span class="color-box" style="background-color: #60a5fa;"></span> Forward (Rekursif)</div>
+                <div class="legend-item"><span class="color-box" style="background-color: #c084fc;"></span> Forward (Iteratif)</div>
+                <div class="legend-item"><span class="color-box" style="background-color: #64748b;"></span> Backtracking</div>
+                <div class="legend-item"><span class="color-box" style="background-color: #fbbf24;"></span> Jalur Solusi</div>
+            </div>
+        </section>
+
+        <!-- Panel Analisis -->
+        <section id="panel-analisis" class="panel">
+            <h2>📊 Panel Analisis</h2>
+            <div id="konten-analisis">
+                <p class="placeholder">Jalankan algoritma untuk melihat hasil analisis...</p>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chart-canvas"></canvas>
+            </div>
+
+            <!-- Calculation Explanation -->
+            <div class="calculation-box" id="calculation-box" style="display: none;">
+                <h3>🧮 Perhitungan & Penjelasan</h3>
+                <div id="calculation-content"></div>
+            </div>
+
+            <!-- Algorithm Explanation -->
+            <div class="algorithm-info">
+                <h3>ℹ️ Perbedaan Algoritma</h3>
+                <div class="info-section">
+                    <h4>🔄 Rekursif:</h4>
+                    <ul>
+                        <li>Menggunakan Call Stack sistem</li>
+                        <li>Lebih intuitif dan mudah dipahami</li>
+                        <li>Backtracking otomatis saat return</li>
+                        <li>Bisa stack overflow pada maze besar</li>
+                    </ul>
+                </div>
+                <div class="info-section">
+                    <h4>📚 Iteratif:</h4>
+                    <ul>
+                        <li>Menggunakan Stack manual (array)</li>
+                        <li>Lebih efisien untuk memory</li>
+                        <li>Kontrol eksplisit atas stack</li>
+                        <li>Tidak ada risiko stack overflow</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Penjelajah Labirin | Dibuat dengan ❤️ menggunakan Vanilla JavaScript</p>
+        <p class="made-by">Made by: Ichya, Lutfi, Zaky</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
